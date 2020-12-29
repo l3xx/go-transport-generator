@@ -55,6 +55,7 @@ const (
 	responseJsonTagSuffix          = "response-json-tag"
 	responseBodySuffix             = "response-body"
 	responseHeaderSuffix           = "response-header"
+	responseHeaderCleanSuffix      = "response-header-clean"
 	responseFileSuffix             = "response-file"
 	responseStatusSuffix           = "response-status"
 	swaggerDescriptionSuffix       = "description"
@@ -146,11 +147,12 @@ func main() {
 												request.NewFormUrlencodedTag(httpServer, requestFormUrlencodedTagSuffix, &request2.Term{}))))))))))))
 	tagsParser = response.NewStatus(httpServer, responseStatusSuffix,
 		response.NewHeader(httpServer, responseHeaderSuffix,
-			response.NewContentType(httpServer, responseContentTypeSuffix,
-				response.NewEncodingType(httpServer, responseContentEncodingSuffix,
-					response.NewJsonTag(httpServer, responseJsonTagSuffix,
-						response.NewFile(httpServer, responseFileSuffix,
-							response.NewBody(httpServer, responseBodySuffix, tagsParser)))))))
+			response.NewHeaderClean(httpServer, responseHeaderCleanSuffix,
+				response.NewContentType(httpServer, responseContentTypeSuffix,
+					response.NewEncodingType(httpServer, responseContentEncodingSuffix,
+						response.NewJsonTag(httpServer, responseJsonTagSuffix,
+							response.NewFile(httpServer, responseFileSuffix,
+								response.NewBody(httpServer, responseBodySuffix, tagsParser))))))))
 	tagsParser = log.NewLogIgnore(logService, ignoreSuffix, tagsParser)
 	swaggerMethodTagParser := swagger2.NewVersion(swagger, swaggerVersionSuffix,
 		swagger2.NewTitle(swagger, swaggerTitleSuffix,

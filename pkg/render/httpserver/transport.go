@@ -45,6 +45,7 @@ var (
 	{{$multipartValueTags := $ct.MultipartValueTags}}
 	{{$multipartFileTags := $ct.MultipartFileTags}}
 	{{$responseHeaderPlaceholders := $ct.ResponseHeaders}}
+	{{$responseHeaderPlaceholdersClean := $ct.ResponseHeadersClean}}
 	{{$responseStatus := $ct.ResponseStatus}}
 	{{$responseContentType := $ct.ResponseContentType}}
 	{{$responseContentEncoding := $ct.ResponseContentEncoding}}
@@ -253,6 +254,9 @@ var (
 		{{end}}
 		{{range $to, $from := $responseHeaderPlaceholders}}
 			r.Header.Set("{{$to}}", "{{$from}}")
+		{{end}}
+		{{range $to, $from := $responseHeaderPlaceholdersClean}}
+			r.Header.Set("{{$to}}", {{$from}})
 		{{end}}
 		{{if $responseFile}}r.SetBody({{$responseFile}}){{end}}
 		{{if $responseFileName}}if len(fileName) > 0 {
