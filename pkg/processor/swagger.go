@@ -113,7 +113,15 @@ func (s *swagger) Process(info *api.GenerationInfo, iface *api.Interface) (err e
 							err = errors.Wrap(err, "[swagger.RequestBody]s.makeType error")
 							return
 						}
-						reqSchema.Properties[arg.Name] = prop
+
+						httpMethod := iface.HTTPMethods[method.Name]
+						jsonTag := arg.Name
+						for tag, tagValue := range httpMethod.JsonTags {
+							if tag == arg.Name {
+								jsonTag = tagValue
+							}
+						}
+						reqSchema.Properties[jsonTag] = prop
 					}
 				}
 			}
