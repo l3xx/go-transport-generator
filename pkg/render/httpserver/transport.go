@@ -50,6 +50,7 @@ var (
 	{{$responseContentEncoding := $ct.ResponseContentEncoding}}
 	{{$responseJsonTags := $ct.ResponseJsonTags}}
 	{{$responseFile := $ct.ResponseFile}}
+	{{$responseStream := $ct.ResponseStream}}
 	{{$responseFileName := $ct.ResponseFileName}}
 	{{$responseBody := $ct.ResponseBody}}
 	{{$responseBodyField := $ct.ResponseBodyField}}
@@ -253,6 +254,14 @@ var (
 		{{end}}
 		{{range $to, $from := $responseHeaderPlaceholders}}
 			r.Header.Set("{{$to}}", "{{$from}}")
+		{{end}}
+		{{if $responseStream}}
+		r.SetBodyStreamWriter(func(w *bufio.Writer) {
+			_, err = io.Copy(w, {{- $responseStream -}})
+			if err != nil {
+				return
+			}
+		})
 		{{end}}
 		{{if $responseFile}}r.SetBody({{$responseFile}}){{end}}
 		{{if $responseFileName}}if len(fileName) > 0 {
