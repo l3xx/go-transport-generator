@@ -55,6 +55,7 @@ const (
 	responseJsonTagSuffix          = "response-json-tag"
 	responseBodySuffix             = "response-body"
 	responseHeaderSuffix           = "response-header"
+	responseStreamSuffix           = "response-stream"
 	responseHeaderCleanSuffix      = "response-header-clean"
 	responseFileSuffix             = "response-file"
 	responseStatusSuffix           = "response-status"
@@ -151,8 +152,9 @@ func main() {
 				response.NewContentType(httpServer, responseContentTypeSuffix,
 					response.NewEncodingType(httpServer, responseContentEncodingSuffix,
 						response.NewJsonTag(httpServer, responseJsonTagSuffix,
-							response.NewFile(httpServer, responseFileSuffix,
-								response.NewBody(httpServer, responseBodySuffix, tagsParser))))))))
+							response.NewFileStream(httpServer, responseStreamSuffix,
+								response.NewFile(httpServer, responseFileSuffix,
+									response.NewBody(httpServer, responseBodySuffix, tagsParser)))))))))
 	tagsParser = log.NewLogIgnore(logService, ignoreSuffix, tagsParser)
 	swaggerMethodTagParser := swagger2.NewVersion(swagger, swaggerVersionSuffix,
 		swagger2.NewTitle(swagger, swaggerTitleSuffix,

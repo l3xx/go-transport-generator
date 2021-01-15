@@ -218,7 +218,7 @@ func (s *swagger) fillParamsFromSlice(pkg string, args []types.Variable, placeho
 }
 
 func (s *swagger) fillParamsFromMap(pkg string, args []types.Variable, placeholders map[string]string, in string, required bool) (params []v1.Parameter) {
-	for _, to := range placeholders {
+	for headerName, to := range placeholders {
 		for _, arg := range args {
 			if arg.Name == to {
 				schema, err := s.makeType(pkg, arg, arg.Type)
@@ -227,7 +227,7 @@ func (s *swagger) fillParamsFromMap(pkg string, args []types.Variable, placehold
 				}
 				params = append(params, v1.Parameter{
 					In:       in,
-					Name:     to,
+					Name:     headerName,
 					Required: required,
 					Schema:   schema,
 				})
@@ -393,6 +393,9 @@ func (s *swagger) castBuiltinType(tp types.Type) (typeName, format string) {
 	case "int", "int8", "int16", "int32", "int64", "uint", "uint8", "uint16", "uint32", "uint64":
 		typeName = "number"
 	case "multipart.FileHeader":
+		format = "binary"
+		typeName = "string"
+	case "io.Reader":
 		format = "binary"
 		typeName = "string"
 	default:
@@ -651,7 +654,7 @@ func (s *swagger) isBuiltin(t types.Type) bool {
 		return true
 	}
 	switch strings.TrimPrefix(t.String(), "*") {
-	case "uuid.UUID", "UUID", "json.RawMessage", "bson.ObjectId", "time.Time", "multipart.FileHeader":
+	case "uuid.UUID", "UUID", "json.RawMessage", "bson.ObjectId", "time.Time", "multipart.FileHeader", "io.Reader":
 		return true
 	default:
 		return false
