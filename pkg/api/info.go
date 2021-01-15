@@ -52,6 +52,7 @@ type HTTPMethod struct {
 	BodyPlaceholders        map[string]*Placeholder
 	IsIntBodyPlaceholders   bool
 	ResponseHeaders         map[string]string
+	ResponseHeadersClean    map[string]string
 	ResponseStatus          string
 	ResponseContentType     string
 	ResponseContentEncoding string
